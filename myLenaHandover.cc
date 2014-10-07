@@ -54,7 +54,7 @@ double distanceEnb = 500.0; // m
 double speed = 20;       // m/s
 double yForUe = 0.0;   // m
 
-void rxBytes (Ptr<const Packet> pkt, const Address &addr)
+void rxBytes (string context, Ptr<const Packet> pkt, const Address &addr)
 {
   uint32_t receivedBytes = pkt->GetSize();
   double timestamp = Simulator::Now().GetSeconds();
@@ -277,7 +277,7 @@ addInitWaypoints (uint32_t i) {
   // Add the initial waypoint
   mod -> AddWaypoint (Waypoint(Time("0s"), Vector (0.5*distanceEnb, distanceEnb + yForUe, 0)));
   
-  // Add two following waypoints
+  // Add one following waypoint
   double waypointTS = (double)(numberOfEnbs) * distanceEnb / speed;
   ostringstream sstream;
   sstream << waypointTS << "s";
@@ -449,7 +449,7 @@ main (int argc, char *argv[])
   system(mkdir_cmd);
 
   flowManager = CreateObject<myFlowManager> ();
-  flowManager->Setup (2.5, 10000, 5, 0.5, logpath);
+  flowManager->Setup (2.5, 10, 5, 0.5, logpath);
   flowManager->SetStartTime (Seconds (0.));
 
   Ptr<Socket> ns3TcpSocket = Socket::CreateSocket (remoteHostContainer.Get (0), TcpSocketFactory::GetTypeId ());
@@ -468,7 +468,7 @@ main (int argc, char *argv[])
   sinkApp->SetStartTime (Seconds (0.));
 
   // Callback for receiving data
-  Config::ConnectWithoutContext ("/NodeList/3/ApplicationList/0/$ns3::PacketSink/Rx", MakeCallback (rxBytes));
+  Config::Connect ("/NodeList/*/ApplicationList/0/$ns3::PacketSink/Rx", MakeCallback (rxBytes));
 
   // Callbacks for handover
   Config::Connect ("/NodeList/*/DeviceList/*/LteEnbRrc/ConnectionEstablished",

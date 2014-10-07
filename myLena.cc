@@ -44,7 +44,7 @@ Ptr<MyApp> sourceApp;
 Ptr<myVideoBuffer> vidBuffer;
 Ptr<myFlowManager> flowManager;
 
-void rxBytes (Ptr<const Packet> pkt, const Address &addr)
+void rxBytes (string context, Ptr<const Packet> pkt, const Address &addr)
 {
   uint32_t receivedBytes = pkt->GetSize();
   double timestamp = Simulator::Now().GetSeconds();
@@ -214,7 +214,7 @@ main (int argc, char *argv[])
   ueNodes.Get (0)->AddApplication (sinkApp);
   sinkApp->SetStartTime (Seconds (0.));
 
-  Config::ConnectWithoutContext ("/NodeList/3/ApplicationList/0/$ns3::PacketSink/Rx", MakeCallback (rxBytes));
+  Config::Connect ("/NodeList/3/ApplicationList/0/$ns3::PacketSink/Rx", MakeCallback (rxBytes));
 
   //lteHelper->EnableTraces ();
   // Uncomment to enable PCAP tracing
