@@ -554,9 +554,25 @@ LteUePhy::GenerateCtrlCqiReport (const SpectrumValue& sinr)
               // store measurements
               std::map <uint16_t, UeMeasurementsElement>::iterator itMeasMap;
               itMeasMap = m_ueMeasurementsMap.find ((*itPss).cellId);
-              NS_ASSERT (itMeasMap != m_ueMeasurementsMap.end ());
+              /*NS_ASSERT (itMeasMap != m_ueMeasurementsMap.end ());
               (*itMeasMap).second.rsrqSum += rsrq_dB;
-              (*itMeasMap).second.rsrqNum++;
+              (*itMeasMap).second.rsrqNum++;*/
+              // Budiarto's fix
+              if (itMeasMap == m_ueMeasurementsMap.end ())
+              {
+                // insert new entry
+                UeMeasurementsElement newEl;
+                newEl.rsrpSum = 0;
+                newEl.rsrpNum = 0;
+                newEl.rsrqSum = rsrq_dB;
+                newEl.rsrqNum = 1;
+                m_ueMeasurementsMap.insert (std::pair <uint16_t, UeMeasurementsElement> (m_cellId, newEl));
+              }
+              else
+              {
+                (*itMeasMap).second.rsrqSum += rsrq_dB;
+                (*itMeasMap).second.rsrqNum++;
+              }
             }
 
           itPss++;
@@ -677,9 +693,25 @@ LteUePhy::GenerateMixedCqiReport (const SpectrumValue& sinr)
               // store measurements
               std::map <uint16_t, UeMeasurementsElement>::iterator itMeasMap;
               itMeasMap = m_ueMeasurementsMap.find ((*itPss).cellId);
-              NS_ASSERT (itMeasMap != m_ueMeasurementsMap.end ());
+              /*NS_ASSERT (itMeasMap != m_ueMeasurementsMap.end ());
               (*itMeasMap).second.rsrqSum += rsrq_dB;
-              (*itMeasMap).second.rsrqNum++;
+              (*itMeasMap).second.rsrqNum++;*/
+              // Budiarto's fix
+              if (itMeasMap == m_ueMeasurementsMap.end ())
+              {
+                // insert new entry
+                UeMeasurementsElement newEl;
+                newEl.rsrpSum = 0;
+                newEl.rsrpNum = 0;
+                newEl.rsrqSum = rsrq_dB;
+                newEl.rsrqNum = 1;
+                m_ueMeasurementsMap.insert (std::pair <uint16_t, UeMeasurementsElement> (m_cellId, newEl));
+              }
+              else
+              {
+                (*itMeasMap).second.rsrqSum += rsrq_dB;
+                (*itMeasMap).second.rsrqNum++;
+              }
             }
 
           itPss++;
