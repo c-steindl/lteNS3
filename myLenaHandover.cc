@@ -311,14 +311,6 @@ main (int argc, char *argv[])
   string framelist = "scratch/framelist.txt";
   string pathlogfiles = "lenaresults/";
 
-  // DEBUGGING
-  datarate = "100";
-  delay = 0.0;
-  pathlogfiles = "lenaresults/video2/";
-  framelist = "scratch/framelist_vid2.txt";
-  yForUe = 150;
-  // END DEBUGGING
-
   // Command line arguments
   CommandLine cmd;
   cmd.AddValue("numberOfUes", "Number of UEs", numberOfUes);
